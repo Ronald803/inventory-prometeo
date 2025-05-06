@@ -2,22 +2,23 @@ const express = require("express");
 const router = express.Router();
 const productController = require("./product.controller");
 const { validateJWT } = require("../../middlewares/validateJWT");
+const responseFunc = require("../../helpers/responseFunc");
 
 router.post("/", validateJWT(), async (req, res) => {
   try {
     const response = await productController.addProduct(req.body);
-    res.send(response);
+    responseFunc.success(res, response.length, response, 200);
   } catch (error) {
-    res.send(error.message);
+    responseFunc.error(res, error.message, 400);
   }
 });
 
 router.get("/", validateJWT(), async (req, res) => {
   try {
     const response = await productController.getProducts();
-    res.send(response);
+    responseFunc.success(res, response.length, response, 200);
   } catch (error) {
-    res.send(error.message);
+    responseFunc.error(res, error.message, 400);
   }
 });
 
